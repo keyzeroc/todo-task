@@ -135,7 +135,7 @@ export default function Todo({ todo, isArchive }: TodoProps) {
               }}
             >
               {/* {todo.createdAt.substring(11, 19)} */}
-              {localizeISOString(todo.createdAt)}
+              {localizeISOString(new Date(todo.date * 1000).toISOString())}
             </Typography>
           </Box>
         </Box>
