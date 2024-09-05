@@ -92,7 +92,9 @@ function App() {
         {currentPage === Pages.Archive && data && (
           <ArchivePage todos={data.filter((todo) => todo.is_archive)} />
         )}
-        {currentPage === Pages["Task Manager"] && <TaskManagerPage />}
+        {currentPage === Pages["Task Manager"] && (
+          <TaskManagerPage onTaskCreate={() => setCurrentPage(Pages["Home"])} />
+        )}
       </Box>
     </Box>
   );

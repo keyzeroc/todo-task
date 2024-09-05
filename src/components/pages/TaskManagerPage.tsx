@@ -5,7 +5,11 @@ import { useAddTodoMutation } from "../../features/api/apiSlice";
 import { TodoType } from "../../types/Todo";
 import dayjs from "dayjs";
 
-export default function TaskManagerPage() {
+type TaskManagerPage = {
+  onTaskCreate: () => void;
+};
+
+export default function TaskManagerPage({onTaskCreate}: TaskManagerPage) {
   const [addToDoMutation] = useAddTodoMutation();
 
   const handleTodoAdd = async (payload: Partial<TodoType>) => {
@@ -16,6 +20,7 @@ export default function TaskManagerPage() {
       is_done: false,
     };
     await addToDoMutation(newPayload);
+    onTaskCreate();
   };
 
   return (
