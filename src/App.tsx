@@ -53,32 +53,37 @@ function App() {
           ToDo List
         </Typography>
         {currentPage && currentPage !== Pages["Task Manager"] && (
-          <Box
+          <DateField
+            readOnly
+            sx={{
+              alignSelf: "center",
+              outline: "none",
+              pointerEvents: "none",
+              borderRadius: 4,
+              backgroundColor: "inputBackground.main",
+              width: "fit-content",
+              ".MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOutline":
+                {
+                  border: "none",
+                  outline: "none",
+                },
+            }}
+            defaultValue={dayjs()}
+            format="YYYY-MM-DD"
+          />
+        )}
+        {isLoading && (
+          <Typography
             sx={{
               alignSelf: "center",
             }}
           >
-            <DateField
-              readOnly
-              sx={{
-                outline: "none",
-                pointerEvents: "none",
-                borderRadius: 4,
-                backgroundColor: "inputBackground.main",
-                width: "fit-content",
-                ".MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOutline":
-                  {
-                    border: "none",
-                    outline: "none",
-                  },
-              }}
-              defaultValue={dayjs()}
-              format="YYYY-MM-DD"
-            />
-          </Box>
+            Loading todos...
+          </Typography>
         )}
-
-        {currentPage === Pages.Home && data && <HomePage todos={data} />}
+        {currentPage === Pages.Home && data && (
+          <HomePage todos={data.filter((todo) => !todo.is_archive)} />
+        )}
         {currentPage === Pages.Archive && data && (
           <ArchivePage todos={data.filter((todo) => todo.is_archive)} />
         )}

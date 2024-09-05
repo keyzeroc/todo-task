@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 
-import EditMode from "../shared/todo/EditMode";
+import EditTodoForm from "../shared/todo/EditTodoForm";
 import { useAddTodoMutation } from "../features/api/apiSlice";
 import { TodoType } from "../types/Todo";
 import dayjs from "dayjs";
@@ -15,8 +15,7 @@ export default function TaskManagerPage() {
       is_archive: false,
       is_done: false,
     };
-    const response = await addToDoMutation(newPayload);
-    console.log(response);
+    await addToDoMutation(newPayload);
   };
 
   return (
@@ -28,7 +27,7 @@ export default function TaskManagerPage() {
           gap: 4,
         }}
       >
-        <EditMode todo={null} onSubmit={handleTodoAdd} />
+        <EditTodoForm todo={null} onSubmit={handleTodoAdd} />
       </Box>
     </>
   );

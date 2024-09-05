@@ -12,12 +12,12 @@ import { useRef, useState } from "react";
 import { StaticDateTimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 
-type EditModeProps = {
+type EditTodoFormProps = {
   todo: TodoType | null; // IF TODO IS NULL, this means we're in Create Mode, if it's not, then Edit Mode
   onSubmit: (payload: Partial<TodoType>) => void;
 };
 
-export default function EditMode({ todo, onSubmit }: EditModeProps) {
+export default function EditTodoForm({ todo, onSubmit }: EditTodoFormProps) {
   const formRef = useRef<null | HTMLFormElement>(null);
   const [title, setTitle] = useState(todo ? todo.name : "");
   const [description, setDescription] = useState(todo ? todo.description : "");

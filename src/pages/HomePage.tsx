@@ -49,7 +49,7 @@ export default function HomePage({ todos }: HomePageProps) {
           sx={{
             display: "flex",
             flexDirection: "column",
-            gap: 4,
+            gap: 2,
           }}
           component={"ul"}
         >

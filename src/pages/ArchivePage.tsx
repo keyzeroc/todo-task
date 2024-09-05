@@ -7,8 +7,6 @@ type ArchivePageProps = {
 };
 
 export default function ArchivePage({ todos }: ArchivePageProps) {
-  console.log(todos);
-
   return (
     <>
       <Box
@@ -23,12 +21,12 @@ export default function ArchivePage({ todos }: ArchivePageProps) {
             sx={{
               display: "flex",
               flexDirection: "column",
-              gap: 4,
+              gap: 2,
             }}
             component={"ul"}
           >
             {todos.map((todo) => (
-              <Todo key={todo.id} todo={todo} />
+              <Todo isArchive={true} key={todo.id} todo={todo} />
             ))}
           </List>
         )}

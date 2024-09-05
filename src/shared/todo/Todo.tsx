@@ -12,19 +12,32 @@ import BasicMenu from "../menu/BasicMenu";
 import CompleteSVG from "../svgs/CompleteSVG";
 import EditSVG from "../svgs/EditSVG";
 import DeleteSVG from "../svgs/DeleteSVG";
-import EditMode from "./EditMode";
-import NormalMode from "./NormalMode";
+import EditTodoForm from "./EditTodoForm";
+import TodoDetails from "./TodoDetails";
 import CloseIcon from "@mui/icons-material/Close";
-import { useUpdateTodoMutation } from "../../features/api/apiSlice";
+import {
+  useDeleteTodoMutation,
+  useUpdateTodoMutation,
+} from "../../features/api/apiSlice";
+import { localizeISOString } from "../../utils/helpers";
+import TodoMenu from "../menu/TodoMenu";
+import TodoArchiveMenu from "../menu/TodoArchiveMenu";
 
 type TodoProps = {
   todo: TodoType;
+  isArchive?: boolean;
 };
 
-export default function Todo({ todo }: TodoProps) {
+export default function Todo({ todo, isArchive }: TodoProps) {
   const [open, setOpen] = useState<boolean>(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [updateTodo] = useUpdateTodoMutation();
+  const [deleteTodoMutation] = useDeleteTodoMutation();
+
+  const handleEditModeSwitch = () => {
+    setIsEditMode(true);
+    setOpen(true);
+  };
 
   const handleTodoComplete = async () => {
     if (todo.is_done) return;
@@ -32,8 +45,22 @@ export default function Todo({ todo }: TodoProps) {
       id: todo.id,
       is_done: true,
     };
-    const res = await updateTodo(payload);
-    console.log(res);
+    await updateTodo(payload);
+  };
+
+  const handleTodoDelete = async () => {
+    const payload = {
+      id: todo.id,
+    };
+    await deleteTodoMutation(payload);
+  };
+
+  const handleToggleArchive = async () => {
+    const payload: Partial<TodoType> = {
+      id: todo.id,
+      is_archive: !todo.is_archive,
+    };
+    await updateTodo(payload);
   };
 
   const handleTodoEdit = async (payload: Partial<TodoType>) => {
@@ -41,8 +68,7 @@ export default function Todo({ todo }: TodoProps) {
       ...todo,
       ...payload,
     };
-    const response = await updateTodo(newPayload);
-    console.log(response);
+    await updateTodo(newPayload);
   };
 
   return (
@@ -116,11 +142,11 @@ export default function Todo({ todo }: TodoProps) {
                 fontWeight: "bold",
               }}
             >
-              {todo.createdAt.substring(11, 19)}
+              {/* {todo.createdAt.substring(11, 19)} */}
+              {localizeISOString(todo.createdAt)}
             </Typography>
           </Box>
         </Box>
-        {/* CLOSE BUTTON IF IN EDIT MODE */}
         {isEditMode && (
           <IconButton
             onClick={() => {
@@ -131,36 +157,21 @@ export default function Todo({ todo }: TodoProps) {
             <CloseIcon />
           </IconButton>
         )}
-        {/* BUTTON TO OPEN MENU */}
         {!isEditMode && (
           <BasicMenu>
-            <MenuItem
-              sx={{
-                padding: 0.5,
-              }}
-              onClick={() => {
-                setIsEditMode(true);
-                setOpen(true);
-              }}
-            >
-              <EditSVG size={14} />
-            </MenuItem>
-            <MenuItem
-              sx={{
-                padding: 0.5,
-              }}
-              onClick={handleTodoComplete}
-            >
-              <CompleteSVG size={14} />
-            </MenuItem>
-            <MenuItem
-              sx={{
-                padding: 0.5,
-              }}
-              onClick={() => {}}
-            >
-              <DeleteSVG size={14} />
-            </MenuItem>
+            {!isArchive && (
+              <TodoMenu
+                onEditModeToggle={handleEditModeSwitch}
+                onArchiveSwitch={handleToggleArchive}
+                onComplete={handleTodoComplete}
+              />
+            )}
+            {isArchive && (
+              <TodoArchiveMenu
+                onArchiveSwitch={handleToggleArchive}
+                onDelete={handleTodoDelete}
+              />
+            )}
           </BasicMenu>
         )}
       </Box>
@@ -175,8 +186,8 @@ export default function Todo({ todo }: TodoProps) {
         timeout="auto"
         unmountOnExit
       >
-        {isEditMode && <EditMode onSubmit={handleTodoEdit} todo={todo} />}
-        {!isEditMode && <NormalMode todo={todo} />}
+        {isEditMode && <EditTodoForm onSubmit={handleTodoEdit} todo={todo} />}
+        {!isEditMode && <TodoDetails todo={todo} />}
       </Collapse>
     </ListItem>
   );

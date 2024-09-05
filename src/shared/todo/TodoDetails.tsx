@@ -2,11 +2,11 @@ import { Box, Typography } from "@mui/material";
 import placeholderImage from "../../assets/placeholder-image.jpg";
 import { TodoType } from "../../types/Todo";
 
-type NormalModeProps = {
+type TodoDetailsProps = {
   todo: TodoType;
 };
 
-export default function NormalMode({ todo }: NormalModeProps) {
+export default function TodoDetails({ todo }: TodoDetailsProps) {
   return (
     <Box
       sx={{
