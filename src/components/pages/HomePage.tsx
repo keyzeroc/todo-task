@@ -5,7 +5,7 @@ import { TodoType } from "../../types/Todo";
 
 import Todo from "../todo/Todo";
 import {
-  sortByDateDescending,
+  sortByDateAscending,
   sortByStatusDescending,
 } from "../../utils/helpers";
 
@@ -20,8 +20,11 @@ export default function HomePage({ todos }: HomePageProps) {
 
   const sortedTodos =
     sortBy === "Date"
-      ? sortByDateDescending(todos)
+      ? sortByDateAscending(todos)
       : sortByStatusDescending(todos);
+
+      console.log(sortedTodos);
+      
 
   return (
     <>

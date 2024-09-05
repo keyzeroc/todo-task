@@ -9,8 +9,8 @@ export const localizeISOString = (isoString: string) => {
     String(dateCreated.getSeconds()).padStart(2, "0");
 }
 
-export const sortByDateDescending = (todos: TodoType[]): TodoType[] => {
-  return todos.sort((a, b) => b.date - a.date);
+export const sortByDateAscending = (todos: TodoType[]): TodoType[] => {
+  return todos.sort((a, b) => a.date - b.date);
 };
 
 export const sortByStatusDescending = (todos: TodoType[]): TodoType[] => {
