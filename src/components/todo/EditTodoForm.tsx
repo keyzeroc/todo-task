@@ -6,8 +6,8 @@ import {
   RadioGroup,
 } from "@mui/material";
 import { TodoType } from "../../types/Todo";
-import { PrimaryButton } from "../button/PrimaryButton";
-import { MyInput } from "../input/Input";
+import { PrimaryButton } from "../shared/PrimaryButton";
+import { MyInput } from "../shared/Input";
 import { useRef, useState } from "react";
 import { StaticDateTimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";

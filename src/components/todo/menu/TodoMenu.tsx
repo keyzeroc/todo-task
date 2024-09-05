@@ -1,7 +1,7 @@
 import { MenuItem } from "@mui/material";
-import EditSVG from "../svgs/EditSVG";
-import CompleteSVG from "../svgs/CompleteSVG";
-import DeleteSVG from "../svgs/DeleteSVG";
+import EditSVG from "../../shared/svgs/EditSVG";
+import CompleteSVG from "../../shared/svgs/CompleteSVG";
+import DeleteSVG from "../../shared/svgs/DeleteSVG";
 
 type TodoMenuProps = {
   onEditModeToggle: () => void;

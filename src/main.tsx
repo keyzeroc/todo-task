@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import App from "./App.tsx";
+import App from "./components/App.tsx";
 import { ThemeProvider } from "@emotion/react";
 import { theme } from "./styles/themeSettings.ts";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";

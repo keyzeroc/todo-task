@@ -4,15 +4,11 @@ import { useState } from "react";
 import { DateField } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import HomePage from "./pages/HomePage";
-import { useGetTodosQuery } from "./features/api/apiSlice";
+import { useGetTodosQuery } from "../features/api/apiSlice";
 import ArchivePage from "./pages/ArchivePage";
 import TaskManagerPage from "./pages/TaskManagerPage";
 
-export enum Pages {
-  "Home" = "Home" as any,
-  "Archive" = "Archive" as any,
-  "Task Manager" = "Task Manager" as any,
-}
+import { Pages } from "../types/Pages";
 
 function App() {
   const [currentPage, setCurrentPage] = useState<Pages>(Pages.Home);
@@ -71,6 +67,15 @@ function App() {
             defaultValue={dayjs()}
             format="YYYY-MM-DD"
           />
+        )}
+        {!isLoading && error && (
+          <Typography
+            sx={{
+              alignSelf: "center",
+            }}
+          >
+            Could not load tasks: {error as string}
+          </Typography>
         )}
         {isLoading && (
           <Typography

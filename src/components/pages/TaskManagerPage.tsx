@@ -1,8 +1,8 @@
 import { Box } from "@mui/material";
 
-import EditTodoForm from "../shared/todo/EditTodoForm";
-import { useAddTodoMutation } from "../features/api/apiSlice";
-import { TodoType } from "../types/Todo";
+import EditTodoForm from "../todo/EditTodoForm";
+import { useAddTodoMutation } from "../../features/api/apiSlice";
+import { TodoType } from "../../types/Todo";
 import dayjs from "dayjs";
 
 export default function TaskManagerPage() {

@@ -1,6 +1,6 @@
 import { Box, List, Typography } from "@mui/material";
-import { TodoType } from "../types/Todo";
-import Todo from "../shared/todo/Todo";
+import { TodoType } from "../../types/Todo";
+import Todo from "../todo/Todo";
 
 type ArchivePageProps = {
   todos: TodoType[];

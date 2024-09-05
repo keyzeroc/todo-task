@@ -1,9 +1,13 @@
 import { Box, Button, List, Typography } from "@mui/material";
-import { PrimaryButton } from "../shared/button/PrimaryButton";
+import { PrimaryButton } from "../shared/PrimaryButton";
 import { useState } from "react";
-import { TodoType } from "../types/Todo";
+import { TodoType } from "../../types/Todo";
 
-import Todo from "../shared/todo/Todo";
+import Todo from "../todo/Todo";
+import {
+  sortByDateDescending,
+  sortByStatusDescending,
+} from "../../utils/helpers";
 
 type SortByType = "Date" | "Status";
 
@@ -13,6 +17,11 @@ type HomePageProps = {
 
 export default function HomePage({ todos }: HomePageProps) {
   const [sortBy, setSortBy] = useState<SortByType>("Date");
+
+  const sortedTodos =
+    sortBy === "Date"
+      ? sortByDateDescending(todos)
+      : sortByStatusDescending(todos);
 
   return (
     <>
@@ -53,7 +62,7 @@ export default function HomePage({ todos }: HomePageProps) {
           }}
           component={"ul"}
         >
-          {todos.map((todo) => (
+          {sortedTodos.map((todo) => (
             <Todo key={todo.id} todo={todo} />
           ))}
         </List>

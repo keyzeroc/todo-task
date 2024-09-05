@@ -3,25 +3,21 @@ import {
   Collapse,
   IconButton,
   ListItem,
-  MenuItem,
   Typography,
 } from "@mui/material";
 import { useState } from "react";
 import { TodoType } from "../../types/Todo";
-import BasicMenu from "../menu/BasicMenu";
-import CompleteSVG from "../svgs/CompleteSVG";
-import EditSVG from "../svgs/EditSVG";
-import DeleteSVG from "../svgs/DeleteSVG";
+import BasicMenu from "../shared/BasicMenu";
 import EditTodoForm from "./EditTodoForm";
-import TodoDetails from "./TodoDetails";
+import TodoDetails from "../todo/TodoDetails";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   useDeleteTodoMutation,
   useUpdateTodoMutation,
 } from "../../features/api/apiSlice";
 import { localizeISOString } from "../../utils/helpers";
-import TodoMenu from "../menu/TodoMenu";
-import TodoArchiveMenu from "../menu/TodoArchiveMenu";
+import TodoMenu from "./menu/TodoMenu";
+import TodoArchiveMenu from "./menu/TodoArchiveMenu";
 
 type TodoProps = {
   todo: TodoType;

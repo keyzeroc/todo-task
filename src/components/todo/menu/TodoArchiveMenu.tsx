@@ -1,6 +1,6 @@
 import { MenuItem } from "@mui/material";
-import CompleteSVG from "../svgs/CompleteSVG";
-import DeleteSVG from "../svgs/DeleteSVG";
+import CompleteSVG from "../../shared/svgs/CompleteSVG";
+import DeleteSVG from "../../shared/svgs/DeleteSVG";
 
 type TodoArchiveMenuProps = {
   onArchiveSwitch: () => void;
