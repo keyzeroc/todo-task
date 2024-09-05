@@ -2,36 +2,48 @@ import {
   Box,
   FormControl,
   FormControlLabel,
-  Input,
   Radio,
   RadioGroup,
 } from "@mui/material";
 import { TodoType } from "../../types/Todo";
 import { PrimaryButton } from "../button/PrimaryButton";
-import { DateTimePicker } from "@mui/x-date-pickers";
+import { MyInput } from "../input/Input";
+import { useRef, useState } from "react";
+import { StaticDateTimePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
-type EditModeProps = { todo: TodoType };
+type EditModeProps = {
+  todo: TodoType | null; // IF TODO IS NULL, this means we're in Create Mode, if it's not, then Edit Mode
+  onSubmit: (payload: Partial<TodoType>) => void;
+};
 
-enum TodoStatuses {
-  "Success",
-  "Pending",
-  "Decline",
-}
+export default function EditMode({ todo, onSubmit }: EditModeProps) {
+  const formRef = useRef<null | HTMLFormElement>(null);
+  const [title, setTitle] = useState(todo ? todo.name : "");
+  const [description, setDescription] = useState(todo ? todo.description : "");
+  const [image, setImage] = useState(todo ? todo.img : "");
+  const [todoStatus, setTodoStatus] = useState<number>(todo ? todo.status : 1);
+  const [date, setDate] = useState(todo ? dayjs(todo.date * 1000) : dayjs());
 
-export default function EditMode({ todo }: EditModeProps) {
   const handleForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    const formData = new FormData(event.currentTarget);
-    console.log(formData);
+    const payload: Partial<TodoType> = {
+      date: date.unix(),
+      description: description,
+      img: image,
+      name: title,
+      status: todoStatus,
+    };
+    onSubmit(payload);
   };
+
   return (
     <Box
-      onSubmit={handleForm}
       component={"form"}
+      ref={formRef}
+      onSubmit={handleForm}
       sx={{
         display: "flex",
-        // justifyContent: "flex-start",
         gap: 1,
       }}
     >
@@ -39,56 +51,83 @@ export default function EditMode({ todo }: EditModeProps) {
         sx={{
           display: "flex",
           flexDirection: "column",
-          gap: 6,
+          gap: 4,
         }}
       >
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
-            gap: 2,
+            gap: 1,
           }}
         >
-          <Input type="text" name="title" placeholder="Title" />
-          <Input type="text" name="description" placeholder="Description" />
-          <Input type="text" name="image" placeholder="Image" />
+          <MyInput
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+            disableUnderline
+            type="text"
+            name="title"
+            placeholder="Title"
+            autoComplete="off"
+          />
+          <MyInput
+            value={description}
+            onChange={(event) => setDescription(event.target.value)}
+            disableUnderline
+            type="text"
+            name="description"
+            placeholder="Description"
+            autoComplete="off"
+          />
+          <MyInput
+            value={image}
+            onChange={(event) => setImage(event.target.value)}
+            disableUnderline
+            type="text"
+            name="image"
+            placeholder="Image"
+            autoComplete="off"
+          />
         </Box>
+
         <FormControl>
           <RadioGroup
+            row
             aria-labelledby="demo-radio-buttons-group-label"
-            defaultValue={todo.status}
+            defaultValue={todoStatus}
             name="radio-buttons-group"
-            sx={{
-              display: "flex",
-              gap: 2,
-            }}
+            value={todoStatus}
+            onChange={(e) => setTodoStatus(Number.parseInt(e.target.value))}
           >
-            <FormControlLabel
-              value={TodoStatuses.Pending}
-              control={<Radio />}
-              label="Pending"
-            />
-            <FormControlLabel
-              value={TodoStatuses.Success}
-              control={<Radio />}
-              label="Success"
-            />
-            <FormControlLabel
-              value={TodoStatuses.Decline}
-              control={<Radio />}
-              label="Decline"
-            />
+            <FormControlLabel value={1} control={<Radio />} label="Pending" />
+            <FormControlLabel value={0} control={<Radio />} label="Success" />
+            <FormControlLabel value={2} control={<Radio />} label="Decline" />
           </RadioGroup>
         </FormControl>
-        <DateTimePicker name="date" views={["year", "month", "day"]} />
+        <StaticDateTimePicker
+          value={date}
+          onChange={(date) => {
+            if (!date) return;
+            setDate(date);
+          }}
+        />
       </Box>
+
       <Box
         sx={{
           marginLeft: "auto",
           alignSelf: "flex-end",
         }}
       >
-        <PrimaryButton>Save Changes</PrimaryButton>
+        <PrimaryButton
+          type="submit"
+          sx={{
+            padding: "8px 10px 8px 10px",
+          }}
+          variant="contained"
+        >
+          {todo ? "Save Changes" : "Add task"}
+        </PrimaryButton>
       </Box>
     </Box>
   );

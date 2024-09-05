@@ -6,5 +6,6 @@ export type TodoType = {
   is_archive: boolean,
   status: number,
   img: null | string,
-  id: string
+  id: string,
+  description: string
 }

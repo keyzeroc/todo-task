@@ -1,6 +1,5 @@
 import * as React from "react";
 import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import { Box, IconButton } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
@@ -48,9 +47,6 @@ export default function BasicMenu({ children }: BasicMenuProps) {
         >
           {children}
         </Box>
-        {/* <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
-        <MenuItem onClick={handleClose}>Logout</MenuItem> */}
       </Menu>
     </div>
   );

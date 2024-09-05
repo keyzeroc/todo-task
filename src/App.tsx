@@ -1,32 +1,23 @@
-import { Box, Button, CssBaseline, Typography } from "@mui/material";
-import MyDrawerFinal from "./shared/MyDrawerFinal";
+import { Box, Typography } from "@mui/material";
+import MiniDrawer from "./shared/MiniDrawer";
 import { useState } from "react";
-import DatePicker from "react-datepicker";
-import { DateField, DateTimePicker } from "@mui/x-date-pickers";
+import { DateField } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
-import { PrimaryButton } from "./shared/button/PrimaryButton";
-import HomePage from "./pages/home/HomePage";
+import HomePage from "./pages/HomePage";
 import { useGetTodosQuery } from "./features/api/apiSlice";
-import ArchivePage from "./pages/archive/ArchivePage";
-import TaskManagerPage from "./pages/taskmanager/TaskManagerPage";
-import DateView from "./shared/date/DateView";
+import ArchivePage from "./pages/ArchivePage";
+import TaskManagerPage from "./pages/TaskManagerPage";
 
-// export type Pages = "Home" | "Archive" | "Task Manager";
 export enum Pages {
   "Home" = "Home" as any,
   "Archive" = "Archive" as any,
   "Task Manager" = "Task Manager" as any,
 }
-type SortByType = "Date" | "Status";
 
 function App() {
   const [currentPage, setCurrentPage] = useState<Pages>(Pages.Home);
-  const [sortBy, setSortBy] = useState<SortByType>("Date");
-  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const { data, isLoading, error } = useGetTodosQuery();
-
-  // console.log(data);
 
   return (
     <Box
@@ -35,14 +26,11 @@ function App() {
         height: "100%",
         display: "flex",
         flexDirection: "row",
-        // gap: 2.5,
-        // justifyContent: "center",
-        // alignItems: "center",
         background: "#background",
       }}
     >
       {/* <CssBaseline /> */}
-      <MyDrawerFinal selectedPage={currentPage} onPageChange={setCurrentPage} />
+      <MiniDrawer selectedPage={currentPage} onPageChange={setCurrentPage} />
       <Box
         sx={{
           width: "100%",
@@ -70,15 +58,31 @@ function App() {
               alignSelf: "center",
             }}
           >
-            <DateView />
+            <DateField
+              readOnly
+              sx={{
+                outline: "none",
+                pointerEvents: "none",
+                borderRadius: 4,
+                backgroundColor: "inputBackground.main",
+                width: "fit-content",
+                ".MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOutline":
+                  {
+                    border: "none",
+                    outline: "none",
+                  },
+              }}
+              defaultValue={dayjs()}
+              format="YYYY-MM-DD"
+            />
           </Box>
         )}
 
         {currentPage === Pages.Home && data && <HomePage todos={data} />}
-        {currentPage === Pages.Archive && data && <ArchivePage />}
+        {currentPage === Pages.Archive && data && (
+          <ArchivePage todos={data.filter((todo) => todo.is_archive)} />
+        )}
         {currentPage === Pages["Task Manager"] && <TaskManagerPage />}
-
-        {/* <DateTimePicker views={["year", "month", "day"]} /> */}
       </Box>
     </Box>
   );

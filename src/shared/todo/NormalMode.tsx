@@ -1,11 +1,12 @@
 import { Box, Typography } from "@mui/material";
 import placeholderImage from "../../assets/placeholder-image.jpg";
+import { TodoType } from "../../types/Todo";
 
 type NormalModeProps = {
-  todoImage: null | string;
+  todo: TodoType;
 };
 
-export default function NormalMode({ todoImage }: NormalModeProps) {
+export default function NormalMode({ todo }: NormalModeProps) {
   return (
     <Box
       sx={{
@@ -14,13 +15,13 @@ export default function NormalMode({ todoImage }: NormalModeProps) {
         gap: 1,
       }}
     >
-      <Typography>Task Description</Typography>
+      <Typography>{todo.description}</Typography>
       <img
         style={{
           width: "20%",
           marginLeft: "auto",
         }}
-        src={todoImage === null ? placeholderImage : todoImage}
+        src={!todo.img ? placeholderImage : todo.img}
         alt="task image"
       />
     </Box>

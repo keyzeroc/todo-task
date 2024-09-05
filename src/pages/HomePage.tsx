@@ -1,9 +1,9 @@
 import { Box, Button, List, Typography } from "@mui/material";
-import { PrimaryButton } from "../../shared/button/PrimaryButton";
+import { PrimaryButton } from "../shared/button/PrimaryButton";
 import { useState } from "react";
-import { TodoType } from "../../types/Todo";
+import { TodoType } from "../types/Todo";
 
-import Todo from "../../shared/todo/Todo";
+import Todo from "../shared/todo/Todo";
 
 type SortByType = "Date" | "Status";
 

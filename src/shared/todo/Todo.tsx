@@ -8,14 +8,14 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { TodoType } from "../../types/Todo";
-import placeholderImage from "../../assets/placeholder-image.jpg";
-import BasicMenu from "../../shared/menu/BasicMenu";
-import CompleteSVG from "../../shared/svgs/CompleteSVG";
-import EditSVG from "../../shared/svgs/EditSVG";
-import DeleteSVG from "../../shared/svgs/DeleteSVG";
+import BasicMenu from "../menu/BasicMenu";
+import CompleteSVG from "../svgs/CompleteSVG";
+import EditSVG from "../svgs/EditSVG";
+import DeleteSVG from "../svgs/DeleteSVG";
 import EditMode from "./EditMode";
 import NormalMode from "./NormalMode";
 import CloseIcon from "@mui/icons-material/Close";
+import { useUpdateTodoMutation } from "../../features/api/apiSlice";
 
 type TodoProps = {
   todo: TodoType;
@@ -24,11 +24,32 @@ type TodoProps = {
 export default function Todo({ todo }: TodoProps) {
   const [open, setOpen] = useState<boolean>(false);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [updateTodo] = useUpdateTodoMutation();
+
+  const handleTodoComplete = async () => {
+    if (todo.is_done) return;
+    const payload: Partial<TodoType> = {
+      id: todo.id,
+      is_done: true,
+    };
+    const res = await updateTodo(payload);
+    console.log(res);
+  };
+
+  const handleTodoEdit = async (payload: Partial<TodoType>) => {
+    const newPayload: TodoType = {
+      ...todo,
+      ...payload,
+    };
+    const response = await updateTodo(newPayload);
+    console.log(response);
+  };
 
   return (
     <ListItem
       sx={{
         display: "flex",
+        flexDirection: "column",
         gap: 2,
         alignItems: "flex-start",
         borderWidth: "1px",
@@ -43,27 +64,13 @@ export default function Todo({ todo }: TodoProps) {
     >
       <Box
         sx={{
-          width: 6,
-          height: 36,
-          borderTopRightRadius: 8,
-          borderBottomRightRadius: 8,
-          backgroundColor: todo.is_done
-            ? "taskPending.main"
-            : "taskComplete.main",
-        }}
-      ></Box>
-      <ListItem
-        component={"div"}
-        key={todo.id}
-        sx={{
-          padding: 0,
+          width: "100%",
           display: "flex",
-          flexDirection: "column",
+          padding: 0,
           gap: 1,
         }}
       >
         <Box
-        
           onClick={() => setOpen((prevOpen) => !prevOpen)}
           sx={{
             width: "100%",
@@ -73,6 +80,19 @@ export default function Todo({ todo }: TodoProps) {
             gap: 1,
           }}
         >
+          {/* COLORED INDICATOR */}
+          <Box
+            sx={{
+              width: 6,
+              height: 36,
+              borderTopRightRadius: 8,
+              borderBottomRightRadius: 8,
+              backgroundColor: todo.is_done
+                ? "taskComplete.main"
+                : "taskPending.main",
+            }}
+          ></Box>
+          {/* TODO NAME */}
           <Typography
             variant="h6"
             component="p"
@@ -82,6 +102,7 @@ export default function Todo({ todo }: TodoProps) {
           >
             {todo.name}
           </Typography>
+          {/* DATE CREATED */}
           <Box
             sx={{
               display: "flex",
@@ -99,41 +120,7 @@ export default function Todo({ todo }: TodoProps) {
             </Typography>
           </Box>
         </Box>
-        <Collapse
-          sx={{
-            width: "100%",
-          }}
-          in={open}
-          timeout="auto"
-          unmountOnExit
-        >
-          {isEditMode && <EditMode todo={todo} />}
-          {!isEditMode && <NormalMode todoImage={todo.img} />}
-          {/* <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-start",
-              gap: 1,
-            }}
-          >
-            <Typography>Task Description</Typography>
-            <img
-              style={{
-                width: "20%",
-                marginLeft: "auto",
-              }}
-              src={todo.img === null ? placeholderImage : todo.img}
-              alt="task image"
-            />
-          </Box> */}
-        </Collapse>
-      </ListItem>
-      <Box
-        sx={{
-          position: "relative",
-          top: -3,
-        }}
-      >
+        {/* CLOSE BUTTON IF IN EDIT MODE */}
         {isEditMode && (
           <IconButton
             onClick={() => {
@@ -144,6 +131,7 @@ export default function Todo({ todo }: TodoProps) {
             <CloseIcon />
           </IconButton>
         )}
+        {/* BUTTON TO OPEN MENU */}
         {!isEditMode && (
           <BasicMenu>
             <MenuItem
@@ -161,7 +149,7 @@ export default function Todo({ todo }: TodoProps) {
               sx={{
                 padding: 0.5,
               }}
-              onClick={() => {}}
+              onClick={handleTodoComplete}
             >
               <CompleteSVG size={14} />
             </MenuItem>
@@ -176,6 +164,20 @@ export default function Todo({ todo }: TodoProps) {
           </BasicMenu>
         )}
       </Box>
+      {/* MORE TASK COLLAPSABLE CONTENT  */}
+      <Collapse
+        sx={{
+          width: "100%",
+          padding: 1,
+          paddingTop: 0,
+        }}
+        in={open}
+        timeout="auto"
+        unmountOnExit
+      >
+        {isEditMode && <EditMode onSubmit={handleTodoEdit} todo={todo} />}
+        {!isEditMode && <NormalMode todo={todo} />}
+      </Collapse>
     </ListItem>
   );
 }

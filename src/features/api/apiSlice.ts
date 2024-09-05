@@ -4,7 +4,11 @@ import type { TodoType } from '../../types/Todo'
 export const apiSlice = createApi({
   reducerPath: 'api',
   tagTypes: ['Todos'],
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://66d045b2181d059277ddeb2b.mockapi.io/api/v1' }),
+  baseQuery: fetchBaseQuery({
+    headers: {
+      'Content-Type': 'application/json',
+    }, baseUrl: 'https://66d045b2181d059277ddeb2b.mockapi.io/api/v1'
+  }),
   endpoints: builder => ({
     getTodos: builder.query<TodoType[], void>({
       query: () => '/todos',
@@ -29,7 +33,7 @@ export const apiSlice = createApi({
     updateTodo: builder.mutation<TodoType, Partial<TodoType>>({
       query: todo => ({
         url: `/todos/${todo.id}`,
-        method: 'PATCH',
+        method: 'PUT',
         body: todo,
       }),
       invalidatesTags: [{ type: 'Todos', id: 'LIST' }],
