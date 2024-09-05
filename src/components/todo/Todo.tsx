@@ -1,10 +1,4 @@
-import {
-  Box,
-  Collapse,
-  IconButton,
-  ListItem,
-  Typography,
-} from "@mui/material";
+import { Box, Collapse, IconButton, ListItem, Typography } from "@mui/material";
 import { useState } from "react";
 import { TodoType } from "../../types/Todo";
 import BasicMenu from "../shared/BasicMenu";
@@ -40,6 +34,7 @@ export default function Todo({ todo, isArchive }: TodoProps) {
     const payload: Partial<TodoType> = {
       id: todo.id,
       is_done: true,
+      status: 0,
     };
     await updateTodo(payload);
   };
@@ -63,6 +58,7 @@ export default function Todo({ todo, isArchive }: TodoProps) {
     const newPayload: TodoType = {
       ...todo,
       ...payload,
+      is_done: payload.status === 1 ? false : true,
     };
     await updateTodo(newPayload);
   };
